@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         tvDisplay = findViewById(R.id.txtResultado)
         tvHistory = findViewById(R.id.txtHistorico)
 
-        // Configuração dos botões
         val digits = listOf(
             "0" to R.id.btn0, "1" to R.id.btn1, "2" to R.id.btn2, "3" to R.id.btn3,
             "4" to R.id.btn4, "5" to R.id.btn5, "6" to R.id.btn6, "7" to R.id.btn7,
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btnIgual).setOnClickListener { onEquals() }
         findViewById<Button>(R.id.btnClear).setOnClickListener { clearAll() }
-        findViewById<Button>(R.id.btnBackspace).setOnClickListener { backspace() } // MODIFICADO: Listener do backspace reativado
+        findViewById<Button>(R.id.btnBackspace).setOnClickListener { backspace() }
         findViewById<Button>(R.id.btnPorcentagem).setOnClickListener { onPercentage() }
         findViewById<Button>(R.id.btnInverterSinal).setOnClickListener { onToggleSign() }
 
@@ -66,7 +65,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun performOperation(op1: Double, op2: Double, op: String?): Double {
-        // ... (lógica da performOperation não mudou)
         return when (op) {
             "+" -> op1 + op2; "-" -> op1 - op2; "*" -> op1 * op2
             "/" -> if (op2 == 0.0) {
@@ -114,14 +112,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // MODIFICADO: Lógica de porcentagem mais inteligente
     private fun onPercentage() {
         if (currentInput.isNotEmpty()) {
             val value = currentInput.toDouble()
-            // Se houver uma operação de soma ou subtração pendente, calcula a % em cima do operando
+
             if (operand != null && (pendingOp == "+" || pendingOp == "-")) {
                 currentInput = (operand!! * (value / 100)).toFormattedString()
-            } else { // Senão, apenas converte o número para sua forma percentual (ex: 50 -> 0.5)
+            } else {
                 currentInput = (value / 100).toFormattedString()
             }
             updateDisplay()
@@ -136,14 +133,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addToHistory(entry: String) {
-        historyList.add(entry) // MODIFICADO: Adiciona no final da lista
+        historyList.add(entry)
         if (historyList.size > 5) {
-            historyList.removeAt(0) // Remove o mais antigo
+            historyList.removeAt(0)
         }
         updateHistoryDisplay()
     }
 
-    // MODIFICADO: Histórico agora mostra mais recentes por último e destaca o último
     private fun updateHistoryDisplay() {
         if (historyList.isEmpty()) {
             tvHistory.text = ""
@@ -155,7 +151,6 @@ class MainActivity : AppCompatActivity() {
 
         val fullHistoryHtml = if (olderEntries.isNotEmpty()) "$olderEntries<br>$latestEntry" else latestEntry
 
-        // Usa Html.fromHtml para renderizar o negrito (<b>)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             tvHistory.text = Html.fromHtml(fullHistoryHtml, Html.FROM_HTML_MODE_LEGACY)
         } else {
@@ -164,7 +159,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // MODIFICADO: updateDisplay agora mostra a operação completa
     private fun updateDisplay() {
         val operandText = operand?.toFormattedString() ?: ""
         val operatorText = if (pendingOp != null) " $pendingOp " else ""
@@ -178,15 +172,15 @@ class MainActivity : AppCompatActivity() {
         return if (this % 1.0 == 0.0) this.toLong().toString() else this.toString()
     }
 
-    // ... (onSaveInstanceState e onRestoreInstanceState não precisam de mudanças agora)
-    override fun onSaveInstanceState(outState: Bundle) { // ...
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("currentInput", currentInput)
         operand?.let { outState.putDouble("operand", it) }
         outState.putString("pendingOp", pendingOp)
         outState.putStringArrayList("historyList", ArrayList(historyList))
     }
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) { // ...
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         currentInput = savedInstanceState.getString("currentInput", "")
         if (savedInstanceState.containsKey("operand")) {
