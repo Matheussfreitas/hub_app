@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <Button
+        android:id="@+id/btnCalculadora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Abrir Calculadora" />
+
+    <Button
+        android:id="@+id/btnBasquete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Abrir placar de basquete"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnQuiz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Abrir Quiz"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class CalcActivity : AppCompatActivity() {
     private lateinit var tvDisplay: TextView
     private var currentInput: String = ""
     private var operand: Double? = null

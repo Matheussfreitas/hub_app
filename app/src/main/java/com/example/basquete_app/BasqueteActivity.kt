@@ -1,4 +1,4 @@
-package com.example.interactive_mobile
+package com.example.basquete_app
 
 import android.app.AlertDialog
 import android.graphics.Typeface
@@ -7,19 +7,10 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.interactive_mobile.ui.theme.InteractivemobileTheme
+import com.example.calc_app.R
 
 
-class MainActivity : ComponentActivity() {
+class BasqueteActivity : ComponentActivity() {
     private var pontuacaoTimeA: Int = 0
     private var pontuacaoTimeB: Int = 0
     private lateinit var pTimeA: TextView
