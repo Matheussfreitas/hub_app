@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AppHub</string>
+
+    <string name="titulo_hub">Central de Aplicativos</string>
+    <string name="botao_placar">Placar de Basquete</string>
+    <string name="botao_calculadora">Calculadora Científica</string>
+    <string name="botao_todo_app">To-Do App</string>
+</resources>
