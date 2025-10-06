@@ -4,55 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
-
-    <EditText
-        android:id="@+id/editTextTask"
-        android:hint="Digite a tarefa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+    android:padding="16dp"
+    android:background="#F5F5F5">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/formContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:elevation="4dp"
+        android:layout_marginBottom="16dp"
+        android:clipToOutline="true"
         android:layout_marginTop="8dp"
-        android:gravity="center_vertical">
+        android:background="@drawable/form_background">
 
-        <TextView
-            android:id="@+id/textViewDate"
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/editTextTask"
+            android:hint="Digite a tarefa"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Nenhuma data selecionada"
-            android:textColor="#333" />
+            android:inputType="text" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nenhuma data selecionada" />
+
+            <Button
+                android:id="@+id/buttonPickDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Escolher data" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinnerPriority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/priority_array"
+            android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/buttonPickDate"
-            android:layout_width="wrap_content"
+            android:id="@+id/buttonAddTask"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Escolher data" />
+            android:text="Adicionar Tarefa"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
-
-    <Spinner
-        android:id="@+id/spinnerPriority"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/priority_array"
-        android:layout_marginTop="8dp" />
-
-    <Button
-        android:id="@+id/buttonAddTask"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Adicionar Tarefa"
-        android:layout_marginTop="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>
