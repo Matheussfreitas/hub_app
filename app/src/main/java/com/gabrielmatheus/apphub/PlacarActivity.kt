@@ -34,6 +34,8 @@ class PlacarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_placar)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         logTextView = findViewById(R.id.logEventos)
         pTimeA = findViewById(R.id.placarTimeA)
         pTimeB = findViewById(R.id.placarTimeB)

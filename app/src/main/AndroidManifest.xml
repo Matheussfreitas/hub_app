@@ -13,13 +13,19 @@
         android:theme="@style/Theme.AppHub">
         <activity
             android:name=".todo.TodoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/todo_name" />
         <activity
             android:name=".PlacarActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/placar_name" />
         <activity
             android:name=".CalcActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/calc_name" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

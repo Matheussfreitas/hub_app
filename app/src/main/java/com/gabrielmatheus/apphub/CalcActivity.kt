@@ -25,6 +25,8 @@ class CalcActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_calc)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         tvDisplay = findViewById(R.id.txtResultado)
         tvHistory = findViewById(R.id.txtHistorico)
 
