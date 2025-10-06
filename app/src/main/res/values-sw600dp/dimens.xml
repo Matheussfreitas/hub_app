@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_xlarge">32dp</dimen>
+    <dimen name="padding_xxlarge">48dp</dimen>
+
+    <dimen name="font_size_small">18sp</dimen>
+    <dimen name="font_size_medium">20sp</dimen>
+    <dimen name="font_size_large">22sp</dimen>
+    <dimen name="font_size_xlarge">30sp</dimen>
+    <dimen name="font_size_display_small">60sp</dimen>
+    <dimen name="font_size_display_large">72sp</dimen>
+
+    <dimen name="divider_size">2dp</dimen>
+    <dimen name="log_height">200dp</dimen>
+    <dimen name="elevation_small">8dp</dimen>
+</resources>

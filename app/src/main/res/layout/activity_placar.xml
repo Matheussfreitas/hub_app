@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="200px">
+        android:paddingTop="@dimen/padding_large">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -23,9 +23,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="16dp"
+                android:padding="@dimen/padding_large"
                 android:text="Time A"
-                android:textSize="14sp"
+                android:textSize="@dimen/font_size_small"
                 android:fontFamily="sans-serif"/>
 
             <TextView
@@ -34,47 +34,47 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="?android:attr/textColorPrimary"
-                android:padding="4dp"
+                android:padding="@dimen/padding_small"
                 android:text="0"
-                android:textSize="54sp"
+                android:textSize="@dimen/font_size_display_large"
                 android:fontFamily="sans-serif"/>
 
             <Button
                 android:id="@+id/tresPontosA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_medium"
                 android:text="+3 PONTOS" />
 
             <Button
                 android:id="@+id/doisPontosA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_medium"
                 android:text="+2 PONTOS" />
 
             <Button
                 android:id="@+id/tiroLivreA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_medium"
                 android:text="Tiro Livre" />
 
             <Button
                 android:id="@+id/faltaA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:layout_marginEnd="@dimen/padding_medium"
                 android:text="FALTA" />
         </LinearLayout>
 
         <View
-            android:layout_width="1dp"
+            android:layout_width="@dimen/divider_size"
             android:layout_height="match_parent"
             android:background="?attr/colorOutline"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/padding_large"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -88,9 +88,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="16dp"
+                android:padding="@dimen/padding_large"
                 android:text="Time B"
-                android:textSize="14sp"
+                android:textSize="@dimen/font_size_small"
                 android:fontFamily="sans-serif"/>
 
             <TextView
@@ -99,39 +99,39 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="?android:attr/textColorPrimary"
-                android:padding="4dp"
+                android:padding="@dimen/padding_small"
                 android:text="0"
-                android:textSize="54sp"
+                android:textSize="@dimen/font_size_display_large"
                 android:fontFamily="sans-serif"/>
 
             <Button
                 android:id="@+id/tresPontosB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_medium"
                 android:text="+3 PONTOS" />
 
             <Button
                 android:id="@+id/doisPontosB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_medium"
                 android:text="+2 PONTOS" />
 
             <Button
                 android:id="@+id/tiroLivreB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/padding_medium"
                 android:text="Tiro Livre" />
 
             <Button
                 android:id="@+id/faltaB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:layout_marginEnd="@dimen/padding_medium"
                 android:text="FALTA" />
         </LinearLayout>
     </LinearLayout>
@@ -141,9 +141,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/scrollViewLogEventos"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/padding_large"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="@dimen/padding_medium"
         android:background="?attr/colorSurfaceContainer">
 
         <LinearLayout
@@ -197,14 +197,14 @@
     <ScrollView
         android:id="@+id/scrollViewLogEventos"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/log_height"
         android:layout_above="@id/linearButtons"
-        android:layout_margin="16dp">
+        android:layout_margin="@dimen/padding_large">
         <TextView
             android:id="@+id/logEventos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="@dimen/padding_medium"
             android:text="Log da Partida:"
             android:gravity="center_horizontal"
             android:background="?attr/colorSurfaceVariant"/>
@@ -217,21 +217,20 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal"
-        android:paddingBottom="30px">
-
+        android:padding="@dimen/padding_xlarge">
         <Button
             android:id="@+id/reiniciarPartida"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/padding_medium"
             android:text="Reiniciar Partida"/>
         <Button
             android:id="@+id/finalizarPartida"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/padding_medium"
             android:text="Finalizar Partida"/>
     </LinearLayout>
 </RelativeLayout>

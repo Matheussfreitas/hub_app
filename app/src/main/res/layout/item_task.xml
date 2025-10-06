@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp"
+    android:padding="@dimen/padding_medium"
     android:gravity="center_vertical">
 
     <CheckBox
@@ -16,20 +16,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:paddingStart="8dp">
+        android:paddingStart="@dimen/padding_medium">
 
         <TextView
             android:id="@+id/textTaskTitle"
             android:text="Título da tarefa"
             android:textStyle="bold"
-            android:textSize="16sp"
+            android:textSize="@dimen/font_size_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textTaskDate"
             android:text="Vence em: 10/10/2025"
-            android:textSize="14sp"
+            android:textSize="@dimen/font_size_small"
             android:textColor="?attr/colorOnSurface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -37,7 +37,7 @@
         <TextView
             android:id="@+id/textTaskPriority"
             android:text="Prioridade: Alta"
-            android:textSize="14sp"
+            android:textSize="@dimen/font_size_small"
             android:textColor="?attr/colorOnSurface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
