@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppHub">
         <activity
-            android:name=".TodoActivity"
+            android:name=".todo.TodoActivity"
             android:exported="false" />
         <activity
             android:name=".PlacarActivity"
