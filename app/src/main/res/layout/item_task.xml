@@ -30,7 +30,7 @@
             android:id="@+id/textTaskDate"
             android:text="Vence em: 10/10/2025"
             android:textSize="14sp"
-            android:textColor="#555"
+            android:textColor="?attr/colorOnSurface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -38,7 +38,7 @@
             android:id="@+id/textTaskPriority"
             android:text="Prioridade: Alta"
             android:textSize="14sp"
-            android:textColor="#777"
+            android:textColor="?attr/colorOnSurface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>

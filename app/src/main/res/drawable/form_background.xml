@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <!-- cor de fundo do formulário -->
-    <solid android:color="#FFFFFF" />
+    <solid android:color="?attr/colorSurface" />
 
     <!-- cantos arredondados -->
     <corners android:radius="12dp" />
