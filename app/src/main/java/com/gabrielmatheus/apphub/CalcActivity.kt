@@ -24,12 +24,16 @@ class CalcActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calc)
 
+        // INFO: Registra que a tela foi aberta e o ciclo de vida
+        LogHelper.i("CalcActivity: onCreate iniciado. Tela da Calculadora aberta.")
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        LogHelper.i("CalcActivity: Tela criada.") // INFO: Registra que a tela foi aberta.
 
         tvDisplay = findViewById(R.id.txtResultado)
         tvHistory = findViewById(R.id.txtHistorico)
 
+        // DEBUG: Rastreia a ligação dos componentes, útil para verificar se o layout está correto
+        LogHelper.d("CalcActivity: Ligando listeners para botões numéricos e de ponto.")
         val digits = listOf(
             "0" to R.id.btn0, "1" to R.id.btn1, "2" to R.id.btn2, "3" to R.id.btn3,
             "4" to R.id.btn4, "5" to R.id.btn5, "6" to R.id.btn6, "7" to R.id.btn7,
@@ -37,30 +41,38 @@ class CalcActivity : AppCompatActivity() {
         )
         digits.forEach { (digit, id) -> findViewById<Button>(id).setOnClickListener { appendDigit(digit) } }
 
+        LogHelper.d("CalcActivity: Ligando listeners para operadores (+,-,*,/).")
         val ops = listOf(
             "+" to R.id.btnSomar, "-" to R.id.btnSubtrair,
             "*" to R.id.btnMultiplicar, "/" to R.id.btnDividir
         )
         ops.forEach { (op, id) -> findViewById<Button>(id).setOnClickListener { onOperator(op) } }
 
-        findViewById<Button>(R.id.btnIgual).setOnClickListener { onEquals() }
+        findViewById<Button>(R.id.btnIgual).setOnClickListener {
+            LogHelper.i("CalcActivity: Botão '=' pressionado.") // INFO
+            onEquals()
+        }
         findViewById<Button>(R.id.btnClear).setOnClickListener { clearAll() }
         findViewById<Button>(R.id.btnBackspace).setOnClickListener { backspace() }
         findViewById<Button>(R.id.btnPorcentagem).setOnClickListener { onPercentage() }
         findViewById<Button>(R.id.btnInverterSinal).setOnClickListener { onToggleSign() }
 
         updateDisplay()
+        LogHelper.i("CalcActivity: onCreate finalizado.")
     }
 
     private fun appendDigit(d: String) {
-        LogHelper.v("appendDigit: Dígito '$d' pressionado.") // VERBOSE: Log super detalhado.
+        // VERBOSE: É o nível mais baixo e ideal para eventos repetitivos como pressionar teclas.
+        LogHelper.v("appendDigit: Dígito '$d' pressionado. currentInput antes: '$currentInput'")
         if (d == "." && currentInput.contains(".")) return
         currentInput = if (currentInput == "0" && d != ".") d else currentInput + d
         updateDisplay()
+        LogHelper.v("appendDigit: currentInput depois: '$currentInput'")
     }
 
     private fun onOperator(op: String) {
-        LogHelper.d("onOperator: Operador '$op' pressionado. Estado atual -> currentInput: '$currentInput', operand: $operand, pendingOp: '$pendingOp'") // DEBUG: Rastreia o estado antes da lógica.
+        // DEBUG: Rastreia o estado antes de mudar a lógica, fundamental para debug de calculadora.
+        LogHelper.d("onOperator: Operador '$op' pressionado. Estado atual -> currentInput: '$currentInput', operand: $operand, pendingOp: '$pendingOp'")
 
         if (currentInput.isNotEmpty()) {
             onEquals(isChainingOperation = true)
@@ -69,14 +81,16 @@ class CalcActivity : AppCompatActivity() {
         operand = currentInput.toDoubleOrNull()
         currentInput = ""
         updateDisplay()
+        LogHelper.d("onOperator: Estado após: Novo pendingOp: '$pendingOp', Novo operand: $operand.")
     }
 
     private fun performOperation(op1: Double, op2: Double, op: String?): Double {
         return when (op) {
             "+" -> op1 + op2; "-" -> op1 - op2; "*" -> op1 * op2
             "/" -> if (op2 == 0.0) {
+                // ERROR: Uma falha na lógica de negócio que o usuário vê (Toast).
                 Toast.makeText(this, "Divisão por zero.", Toast.LENGTH_SHORT).show()
-                LogHelper.e("performOperation: Tentativa de divisão por zero.") // ERROR: Registra uma falha crítica.
+                LogHelper.e("performOperation: Tentativa de divisão por zero. O resultado será o primeiro operando ($op1).")
                 op1
             } else op1 / op2
             else -> op2
@@ -85,9 +99,15 @@ class CalcActivity : AppCompatActivity() {
 
     private fun onEquals(isChainingOperation: Boolean = false) {
         if (operand != null && pendingOp != null && currentInput.isNotEmpty()) {
-            val secondOperand = currentInput.toDoubleOrNull() ?: return
+            val secondOperand = currentInput.toDoubleOrNull()
+            if (secondOperand == null) {
+                // WARNING: Algo deu errado com o input que não era esperado.
+                LogHelper.w("onEquals: secondOperand é nulo. Abortando cálculo.")
+                return
+            }
 
-            LogHelper.d("onEquals: Calculando -> ${operand!!} ${pendingOp!!} $secondOperand") // DEBUG: Mostra exatamente o que será calculado.
+            // DEBUG: Mostra a operação exata
+            LogHelper.d("onEquals: Calculando -> ${operand!!.toFormattedString()} ${pendingOp!!} ${secondOperand.toFormattedString()}")
 
             val result = performOperation(operand!!, secondOperand, pendingOp)
             val resultString = result.toFormattedString()
@@ -102,11 +122,15 @@ class CalcActivity : AppCompatActivity() {
             if (!isChainingOperation) {
                 updateDisplay()
             }
+        } else {
+            // INFO: O usuário pressionou '=' mas não havia operação pendente.
+            LogHelper.i("onEquals: Botão '=' pressionado sem operação pendente.")
         }
     }
 
     private fun clearAll() {
-        LogHelper.w("clearAll: Usuário limpou todos os dados.") // WARNING: É uma ação destrutiva, vale um aviso.
+        // WARNING: Ação destrutiva que limpa todos os dados de estado e histórico.
+        LogHelper.w("clearAll: Dados de input, operando e histórico foram limpos.")
         currentInput = ""
         operand = null
         pendingOp = null
@@ -116,6 +140,7 @@ class CalcActivity : AppCompatActivity() {
     }
 
     private fun backspace() {
+        LogHelper.v("backspace: Removendo último caractere de '$currentInput'.")
         if (currentInput.isNotEmpty()) {
             currentInput = currentInput.dropLast(1)
             if (currentInput.isEmpty()) {
@@ -185,8 +210,10 @@ class CalcActivity : AppCompatActivity() {
         return if (this % 1.0 == 0.0) this.toLong().toString() else this.toString()
     }
 
+    // INFO: Adicionando logs ao ciclo de vida de persistência
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        LogHelper.i("CalcActivity: onSaveInstanceState. Salvando estado da calculadora.")
         outState.putString("currentInput", currentInput)
         operand?.let { outState.putDouble("operand", it) }
         outState.putString("pendingOp", pendingOp)
@@ -195,6 +222,7 @@ class CalcActivity : AppCompatActivity() {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+        LogHelper.i("CalcActivity: onRestoreInstanceState. Restaurando estado da calculadora.")
         currentInput = savedInstanceState.getString("currentInput", "")
         if (savedInstanceState.containsKey("operand")) {
             operand = savedInstanceState.getDouble("operand")

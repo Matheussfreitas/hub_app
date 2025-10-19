@@ -7,36 +7,44 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gabrielmatheus.apphub.todo.TodoActivity
 
 class MainActivity : AppCompatActivity() {
+
+    // Nível INFO: Usado para registrar eventos importantes como a criação da Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Carrega o layout visual que criamos em activity_main.xml
+        LogHelper.i("MainActivityHub: onCreate iniciado. Carregando layout.")
+
         setContentView(R.layout.activity_main)
 
-        // 1. Encontrar cada botão no layout pelo seu ID
+        // Nível DEBUG: Usado para rastrear o processo de ligação de componentes
+        LogHelper.d("MainActivityHub: Tentando encontrar botões no layout.")
         val btnPlacar: Button = findViewById(R.id.btnPlacarBasquete)
         val btnCalculadora: Button = findViewById(R.id.btnCalculadora)
-        val btnTodoApp: Button = findViewById(R.id.btnTodoApp) // Assumindo que o ID do terceiro botão é este
+        val btnTodoApp: Button = findViewById(R.id.btnTodoApp)
 
         // 2. Configurar o que acontece quando o botão do Placar é clicado
         btnPlacar.setOnClickListener {
-            // Cria uma "intenção" de abrir a PlacarActivity
+            // Nível INFO: O clique no botão é um evento importante de navegação
+            LogHelper.i("MainActivityHub: Botão 'Placar de Basquete' clicado. Iniciando PlacarActivity.")
             val intent = Intent(this, PlacarActivity::class.java)
-            // Executa a intenção, abrindo a nova tela
             startActivity(intent)
         }
 
         // 3. Configurar o que acontece quando o botão da Calculadora é clicado
         btnCalculadora.setOnClickListener {
-            // Cria uma "intenção" de abrir a CalcActivity
+            // Nível INFO: O clique no botão é um evento importante de navegação
+            LogHelper.i("MainActivityHub: Botão 'Calculadora' clicado. Iniciando CalcActivity.")
             val intent = Intent(this, CalcActivity::class.java)
             startActivity(intent)
         }
 
         // 4. Configurar o que acontece quando o botão do Novo App é clicado
         btnTodoApp.setOnClickListener {
-            // Cria uma "intenção" de abrir a TodoActivity (ou o nome que você escolheu)
+            // Nível INFO: O clique no botão é um evento importante de navegação
+            LogHelper.i("MainActivityHub: Botão 'Todo App' clicado. Iniciando TodoActivity.")
             val intent = Intent(this, TodoActivity::class.java)
             startActivity(intent)
         }
+
+        LogHelper.i("MainActivityHub: onCreate finalizado. Hub pronto para uso.")
     }
 }

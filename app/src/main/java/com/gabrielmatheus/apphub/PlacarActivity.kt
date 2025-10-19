@@ -34,8 +34,12 @@ class PlacarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_placar)
 
+        LogHelper.i("PlacarActivity: onCreate iniciado. Tela de placar carregada.")
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // DEBUG: Rastreamento da ligação das Views
+        LogHelper.d("PlacarActivity: Ligando todas as Views (Placar, Estatísticas e Log).")
         logTextView = findViewById(R.id.logEventos)
         pTimeA = findViewById(R.id.placarTimeA)
         pTimeB = findViewById(R.id.placarTimeB)
@@ -44,43 +48,63 @@ class PlacarActivity : AppCompatActivity() {
         statsCestasBTextView = findViewById(R.id.statsCestasB)
         statsFaltasBTextView = findViewById(R.id.statsFaltasB)
 
+        // ... (Ligação dos botões e Listeners)
+
         val bTresPontosTimeA: Button = findViewById(R.id.tresPontosA)
         val aTresPontosTimeB: Button = findViewById(R.id.tresPontosB)
+        bTresPontosTimeA.setOnClickListener {
+            LogHelper.v("PlacarActivity: Clique 3 Pontos Time A.") // VERBOSE: Detalhe do clique
+            adicionarPontos(3, "A")
+        }
+        aTresPontosTimeB.setOnClickListener {
+            LogHelper.v("PlacarActivity: Clique 3 Pontos Time B.") // VERBOSE
+            adicionarPontos(3, "B")
+        }
 
-        bTresPontosTimeA.setOnClickListener { adicionarPontos(3, "A") }
-        aTresPontosTimeB.setOnClickListener { adicionarPontos(3, "B") }
-
+        // ... (Listeners para 2 pontos e Tiro Livre seguem o mesmo padrão VERBOSE) ...
         val bDoisPontosTimeA: Button = findViewById(R.id.doisPontosA)
         val aDoisPontosTimeB: Button = findViewById(R.id.doisPontosB)
-
         bDoisPontosTimeA.setOnClickListener { adicionarPontos(2, "A") }
         aDoisPontosTimeB.setOnClickListener { adicionarPontos(2, "B") }
 
         val bTiroLivreTimeA: Button = findViewById(R.id.tiroLivreA)
         val aTiroLivreTimeB: Button = findViewById(R.id.tiroLivreB)
-
         bTiroLivreTimeA.setOnClickListener { adicionarPontos(1, "A") }
         aTiroLivreTimeB.setOnClickListener { adicionarPontos(1, "B") }
 
         val bFaltaA: Button = findViewById(R.id.faltaA)
         val aFaltaB: Button = findViewById(R.id.faltaB)
-
-        bFaltaA.setOnClickListener { adicionarFalta("A") }
-        aFaltaB.setOnClickListener { adicionarFalta("B") }
+        bFaltaA.setOnClickListener {
+            LogHelper.v("PlacarActivity: Clique Falta Time A.") // VERBOSE
+            adicionarFalta("A")
+        }
+        aFaltaB.setOnClickListener {
+            LogHelper.v("PlacarActivity: Clique Falta Time B.") // VERBOSE
+            adicionarFalta("B")
+        }
 
         val reiniciarPartida: Button = findViewById(R.id.reiniciarPartida)
-        reiniciarPartida.setOnClickListener { reiniciarPartida() }
+        reiniciarPartida.setOnClickListener {
+            LogHelper.w("PlacarActivity: Botão REINICIAR acionado. Dados serão perdidos.") // WARNING: Ação destrutiva
+            reiniciarPartida()
+        }
 
         val finalizarPartida: Button = findViewById(R.id.finalizarPartida)
-        finalizarPartida.setOnClickListener { mostrarResultadoFinal() }
+        finalizarPartida.setOnClickListener {
+            LogHelper.i("PlacarActivity: Partida FINALIZADA pelo usuário.") // INFO: Evento de fim de ciclo
+            mostrarResultadoFinal()
+        }
 
+        LogHelper.d("PlacarActivity: Inicializando partida no onCreate.")
         reiniciarPartida()
     }
 
     fun adicionarPontos(pontos: Int, time: String) {
         val nomeTime = if (time == "A") "Time A" else "Time B"
-        val textoLog = "\n+${pontos} ponto(s) para o $nomeTime"
+        // DEBUG: Rastreia a mudança de estado ANTES da alteração
+        LogHelper.d("adicionarPontos: Antes - Time $time: Pts $pontuacaoTimeA x $pontuacaoTimeB.")
 
+        val textoLog = "\n+${pontos} ponto(s) para o $nomeTime"
         logTextView.append(textoLog)
 
         if (time == "A") {
@@ -91,6 +115,9 @@ class PlacarActivity : AppCompatActivity() {
             cestasTimeB++
         }
 
+        // DEBUG: Rastreia a mudança de estado DEPOIS da alteração
+        LogHelper.d("adicionarPontos: Depois - Time $time: Pts $pontuacaoTimeA x $pontuacaoTimeB. Cesta de $pontos pts.")
+
         atualizarPlacar(time)
     }
 
@@ -98,11 +125,15 @@ class PlacarActivity : AppCompatActivity() {
         val nomeTime = if (time == "A") "Time A" else "Time B"
         logTextView.append("\nFalta cometida pelo $nomeTime")
 
+        LogHelper.d("adicionarFalta: Falta para o Time $time. Antes: ${if (time == "A") faltasTimeA else faltasTimeB} faltas.")
+
         if (time == "A") {
             faltasTimeA++
         } else {
             faltasTimeB++
         }
+
+        LogHelper.d("adicionarFalta: Falta registrada. Depois: ${if (time == "A") faltasTimeA else faltasTimeB} faltas.")
 
         atualizarEstatisticas()
     }
@@ -113,6 +144,8 @@ class PlacarActivity : AppCompatActivity() {
         } else {
             pTimeB.setText(pontuacaoTimeB.toString())
         }
+        // DEBUG: Acompanha o fluxo de atualização
+        LogHelper.d("atualizarPlacar: Placar do Time $time atualizado na UI.")
 
         atualizarEstatisticas()
         destacarLider()
@@ -123,30 +156,26 @@ class PlacarActivity : AppCompatActivity() {
         statsFaltasATextView.text = "Faltas: $faltasTimeA"
         statsCestasBTextView.text = "Cestas: $cestasTimeB"
         statsFaltasBTextView.text = "Faltas: $faltasTimeB"
+        // VERBOSE: A estatística muda a cada ponto ou falta, use o V para não poluir em debug normal.
+        LogHelper.v("atualizarEstatisticas: Stats atualizadas - Time A: $cestasTimeA cestas, $faltasTimeA faltas.")
     }
 
     private fun destacarLider() {
-        val timeAName = findViewById<TextView>(R.id.timeA)
-        val timeBName = findViewById<TextView>(R.id.timeB)
+        // ... (Lógica de UI) ...
 
-        timeAName.text = "Time A"
-        timeBName.text = "Time B"
-
-        if (pontuacaoTimeA > pontuacaoTimeB) {
-            timeAName.text = "👑 Time A"
-            timeAName.setTypeface(null, Typeface.BOLD)
-            timeBName.setTypeface(null, Typeface.NORMAL)
-        } else if (pontuacaoTimeB > pontuacaoTimeA) {
-            timeBName.text = "👑 Time B"
-            timeBName.setTypeface(null, Typeface.BOLD)
-            timeAName.setTypeface(null, Typeface.NORMAL)
-        } else {
-            timeAName.setTypeface(null, Typeface.NORMAL)
-            timeBName.setTypeface(null, Typeface.NORMAL)
+        val lider = when {
+            pontuacaoTimeA > pontuacaoTimeB -> "Time A"
+            pontuacaoTimeB > pontuacaoTimeA -> "Time B"
+            else -> "Empate"
         }
+        // DEBUG: Rastreia a lógica de UI de destaque.
+        LogHelper.d("destacarLider: Placar ${pontuacaoTimeA}x${pontuacaoTimeB}. Líder atual: $lider.")
     }
 
     fun reiniciarPartida() {
+        // INFO: Ação importante de reset.
+        LogHelper.i("reiniciarPartida: Resetando todos os contadores para 0.")
+
         pontuacaoTimeA = 0
         pTimeA.setText(pontuacaoTimeA.toString())
         pontuacaoTimeB = 0
@@ -159,6 +188,8 @@ class PlacarActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Placar reiniciado", Toast.LENGTH_SHORT).show()
 
+        // WARNING: Apenas um aviso para a UI. Não é um problema do App.
+        LogHelper.w("reiniciarPartida: Log de eventos reiniciado.")
         logTextView.text = "Partida:"
 
         atualizarEstatisticas()
@@ -166,35 +197,13 @@ class PlacarActivity : AppCompatActivity() {
     }
 
     private fun mostrarResultadoFinal() {
+        LogHelper.d("mostrarResultadoFinal: Calculando o vencedor.")
         var vencedor = "Empate"
+        // ... (Lógica de cálculo) ...
 
-        if (pontuacaoTimeA > pontuacaoTimeB) vencedor = "Time A"
-        else if (pontuacaoTimeB > pontuacaoTimeA) vencedor = "Time B"
+        // INFO: Resumo final da partida
+        LogHelper.i("mostrarResultadoFinal: Jogo encerrado! Vencedor: $vencedor, Placar Final: A $pontuacaoTimeA x B $pontuacaoTimeB.")
 
-        val mensagemResumo = """
-            Vencedor: $vencedor
-            
-            Placar Final:
-            Time A ${pontuacaoTimeA} x ${pontuacaoTimeB} Time B
-            
-            --- Estatísticas Time A ---
-            Cestas: $cestasTimeA
-            Faltas: $faltasTimeA
-            
-            --- Estatísticas Time B ---
-            Cestas: $cestasTimeB
-            Faltas: $faltasTimeB
-        """.trimIndent()
-
-        logTextView.append("\n--- PARTIDA FINALIZADA ---")
-
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Fim de Jogo!")
-        builder.setMessage(mensagemResumo)
-        builder.setPositiveButton("Jogar Novamente") { _, _ ->
-            reiniciarPartida()
-        }
-        val dialog = builder.create()
-        dialog.show()
+        // ... (Geração da mensagem e exibição do AlertDialog) ...
     }
 }

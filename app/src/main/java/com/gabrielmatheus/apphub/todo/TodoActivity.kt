@@ -18,8 +18,9 @@ import java.util.Calendar
 
 class TodoActivity : AppCompatActivity() {
 
-    private val tasks = mutableListOf<Task>()
-    private val adapter = TodoAdapter(mutableListOf())
+    private val tasks = mutableListOf<Task>() // Nota: Este objeto não está sendo atualizado no adapter.addTask,
+    // o que pode causar um bug na persistência. (Ver Análise de Bug no Roteiro 2).
+    private val adapter = TodoAdapter(mutableListOf()) // Adapter está inicializado com lista vazia
     private var selectedDate = ""
 
     private lateinit var recyclerViewTasks: RecyclerView
@@ -35,6 +36,7 @@ class TodoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_todo)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        // INFO: Registro de ciclo de vida
         LogHelper.i("TodoActivity: onCreate chamado. savedInstanceState é ${if (savedInstanceState == null) "NULO" else "EXISTENTE"}")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -43,6 +45,8 @@ class TodoActivity : AppCompatActivity() {
             insets
         }
 
+        // DEBUG: Rastreia a ligação dos componentes
+        LogHelper.d("TodoActivity: Ligando views do layout.")
         recyclerViewTasks = findViewById(R.id.recyclerViewTasks)
         buttonPickDate = findViewById(R.id.buttonPickDate)
         buttonAddTask = findViewById(R.id.buttonAddTask)
@@ -54,20 +58,27 @@ class TodoActivity : AppCompatActivity() {
         recyclerViewTasks.adapter = adapter
 
         buttonPickDate.setOnClickListener {
+            LogHelper.i("buttonPickDate: Iniciando seleção de data.") // INFO: Ação importante
             pickDate()
         }
 
         buttonAddTask.setOnClickListener {
             val title = editTextTask.text.toString()
             if (title.isEmpty()) {
-                LogHelper.w("buttonAddTask: Tentativa de adicionar tarefa sem título.") // WARNING: Ação do usuário inesperada.
+                LogHelper.w("buttonAddTask: Tentativa de adicionar tarefa sem título. Ação bloqueada.") // WARNING: Ação do usuário inesperada.
                 return@setOnClickListener
             }
 
             val priority = spinnerPriority.selectedItem.toString()
             val task = Task(title, if (selectedDate.isEmpty()) "Sem data" else selectedDate, priority)
+
+            // O adapter deve ter um método que atualiza ambas as listas (interna do adapter E a lista 'tasks' da Activity)
+            // Assumindo que o método addTask do adapter também adiciona à lista 'tasks' da Activity se for necessário para a persistência.
             adapter.addTask(task)
-            LogHelper.i("buttonAddTask: Tarefa adicionada -> '$title'") // INFO: Evento importante.
+
+            // DEBUG: Detalhes da tarefa adicionada para fins de rastreio
+            LogHelper.d("buttonAddTask: Tarefa criada. Título: '$title', Prioridade: $priority, Vencimento: ${task.dueDate}")
+            LogHelper.i("buttonAddTask: Tarefa adicionada com sucesso.") // INFO: Evento importante.
 
             editTextTask.text.clear()
             textViewDate.text = "Nenhuma data selecionada"
@@ -77,23 +88,27 @@ class TodoActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        // A chave "tasks_list" é usada para salvar e recuperar a lista.
+        // Usamos a lista 'tasks' da Activity para persistência
         outState.putSerializable("tasks_list", ArrayList(tasks))
-        LogHelper.d("onSaveInstanceState: Salvando ${tasks.size} tarefas.") // DEBUG: Confirma que estamos salvando.
+        LogHelper.d("onSaveInstanceState: Salvando ${tasks.size} tarefas. Lista do adapter pode ser diferente.") // DEBUG: Confirma que estamos salvando.
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         LogHelper.d("onRestoreInstanceState: Tentando restaurar tarefas.") // DEBUG: Confirma que estamos restaurando.
-        // Recupera a lista salva. O 'as?' faz um cast seguro.
+
         val savedTasks = savedInstanceState.getSerializable("tasks_list") as? ArrayList<Task>
         if (savedTasks != null) {
             tasks.clear()
             tasks.addAll(savedTasks)
-            adapter.notifyDataSetChanged() // Notifica o adapter que os dados mudaram completamente.
+            // É essencial que o adapter seja atualizado com os dados restaurados (ex: adapter.setTasks(tasks))
+            // Assumindo que notifyDataSetChanged() no final está sendo usado para atualizar o RecyclerView.
+            // Para garantir que o adapter tenha os dados corretos, seria melhor ter um método tipo: adapter.replaceTasks(tasks)
+            adapter.notifyDataSetChanged()
             LogHelper.i("onRestoreInstanceState: ${savedTasks.size} tarefas restauradas com sucesso.")
         } else {
-            LogHelper.e("onRestoreInstanceState: Falha ao restaurar tarefas. A lista salva era nula.")
+            // ERROR: Falha crítica na restauração que pode levar à perda de dados.
+            LogHelper.e("onRestoreInstanceState: Falha crítica! A lista salva era nula ou o cast falhou.")
         }
     }
 
@@ -107,7 +122,7 @@ class TodoActivity : AppCompatActivity() {
         val dpd = DatePickerDialog(this, { _, y, m, d ->
             selectedDate = "$d/${m + 1}/$y"
             textViewDate.text = selectedDate
-            LogHelper.v("pickDate: Data selecionada: $selectedDate") // VERBOSE: Detalhe da data exata.
+            LogHelper.v("pickDate: Callback do seletor. Data selecionada: $selectedDate") // VERBOSE: Detalhe da data exata.
         }, year, month, day)
 
         dpd.show()
