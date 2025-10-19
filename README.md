@@ -130,17 +130,15 @@ app/src/main/java/com/gabrielmatheus/apphub/
 - **Cores e Tipografia**: Esquema visual harmonioso
 - **Acessibilidade**: Componentes otimizados para diferentes usuários
 
-# 🛠️ Guia de Debug e Rastreamento de Logs (App Hub)
+## 🛠️ Guia de Debug e Rastreamento de Logs (App Hub)
 
 Este documento detalha os roteiros de debug e as análises de funcionamento para os aplicativos presentes no App Hub, utilizando a classe centralizada `LogHelper` (`TAG: AppHub`).
 
 **Filtro de Logcat Recomendado:** `TAG:AppHub` ou `Package:com.gabrielmatheus.apphub` com o nível de log **Debug (D)**.
 
----
-
 ## 🔍 Roteiro de Debug 1: Calculadora (CalcActivity)
 
-A **Calculadora (App 2)** exige rastreamento detalhado de estado, especialmente durante operações em cadeia e tratamento de exceções (como divisão por zero).
+A **Calculadora** exige rastreamento detalhado de estado, especialmente durante operações em cadeia e tratamento de exceções (como divisão por zero).
 
 ### Cenário A: Cadeia de Operações (Chaining Operation)
 
@@ -165,7 +163,7 @@ A **Calculadora (App 2)** exige rastreamento detalhado de estado, especialmente 
 
 ## 🛒 Roteiro de Debug 2: Todo App (TodoActivity)
 
-O **Todo App (App 3)** foca na persistência de dados (`RecyclerView` e `onSaveInstanceState`) e manipulação de input.
+O **Todo App** foca na persistência de dados (`RecyclerView` e `onSaveInstanceState`) e manipulação de input.
 
 ### Cenário A: Falha na Persistência de Estado (BUG CRÍTICO)
 
@@ -188,11 +186,9 @@ O **Todo App (App 3)** foca na persistência de dados (`RecyclerView` e `onSaveI
 | **2** | Clica em **Selecionar Data**. Seleciona `01/10/2025`. | O `textViewDate` é atualizado para a data correta. O log **V**erbose é gerado com a data exata. | O `textViewDate` mostra a data errada (ex: `01/9/2025` - erro de mês). | **V**erbose: `pickDate` |
 | **3** | Adiciona Tarefa **"Reunião"** (com a data selecionada). | A tarefa é criada e o log **D**ebug confirma a data `01/10/2025` na tarefa. | A tarefa é adicionada com a data `Sem data` (falha na captura da variável `selectedDate`). | **D**ebug: `buttonAddTask` |
 
----
-
 ## 🏀 Roteiro de Debug 3: Placar de Basquete (PlacarActivity)
 
-A **PlacarActivity (App 1)** testa a integridade dos contadores de estado e a lógica de UI dinâmica (destaque do líder).
+A **PlacarActivity** testa a integridade dos contadores de estado e a lógica de UI dinâmica (destaque do líder).
 
 ### Cenário A: Integridade da Pontuação e Faltas
 
@@ -217,8 +213,6 @@ A **PlacarActivity (App 1)** testa a integridade dos contadores de estado e a l�
 ## 📄 Licença
 
 Este projeto é desenvolvido para fins educacionais como parte do curso de desenvolvimento mobile.
-
----
 
 ⭐ **Dica**: Se gostou do projeto, não esqueça de dar uma estrela no repositório!
 
