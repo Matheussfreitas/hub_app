@@ -1,6 +1,8 @@
 package com.gabrielmatheus.apphub.todo;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable {
     public String title;
     public String dueDate;
     public String priority;

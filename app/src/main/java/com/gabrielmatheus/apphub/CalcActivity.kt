@@ -22,10 +22,10 @@ class CalcActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_calc)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        LogHelper.i("CalcActivity: Tela criada.") // INFO: Registra que a tela foi aberta.
 
         tvDisplay = findViewById(R.id.txtResultado)
         tvHistory = findViewById(R.id.txtHistorico)
@@ -53,12 +53,15 @@ class CalcActivity : AppCompatActivity() {
     }
 
     private fun appendDigit(d: String) {
+        LogHelper.v("appendDigit: Dígito '$d' pressionado.") // VERBOSE: Log super detalhado.
         if (d == "." && currentInput.contains(".")) return
         currentInput = if (currentInput == "0" && d != ".") d else currentInput + d
         updateDisplay()
     }
 
     private fun onOperator(op: String) {
+        LogHelper.d("onOperator: Operador '$op' pressionado. Estado atual -> currentInput: '$currentInput', operand: $operand, pendingOp: '$pendingOp'") // DEBUG: Rastreia o estado antes da lógica.
+
         if (currentInput.isNotEmpty()) {
             onEquals(isChainingOperation = true)
         }
@@ -72,7 +75,9 @@ class CalcActivity : AppCompatActivity() {
         return when (op) {
             "+" -> op1 + op2; "-" -> op1 - op2; "*" -> op1 * op2
             "/" -> if (op2 == 0.0) {
-                Toast.makeText(this, "Divisão por zero.", Toast.LENGTH_SHORT).show(); op1
+                Toast.makeText(this, "Divisão por zero.", Toast.LENGTH_SHORT).show()
+                LogHelper.e("performOperation: Tentativa de divisão por zero.") // ERROR: Registra uma falha crítica.
+                op1
             } else op1 / op2
             else -> op2
         }
@@ -81,6 +86,9 @@ class CalcActivity : AppCompatActivity() {
     private fun onEquals(isChainingOperation: Boolean = false) {
         if (operand != null && pendingOp != null && currentInput.isNotEmpty()) {
             val secondOperand = currentInput.toDoubleOrNull() ?: return
+
+            LogHelper.d("onEquals: Calculando -> ${operand!!} ${pendingOp!!} $secondOperand") // DEBUG: Mostra exatamente o que será calculado.
+
             val result = performOperation(operand!!, secondOperand, pendingOp)
             val resultString = result.toFormattedString()
 
@@ -98,6 +106,7 @@ class CalcActivity : AppCompatActivity() {
     }
 
     private fun clearAll() {
+        LogHelper.w("clearAll: Usuário limpou todos os dados.") // WARNING: É uma ação destrutiva, vale um aviso.
         currentInput = ""
         operand = null
         pendingOp = null
